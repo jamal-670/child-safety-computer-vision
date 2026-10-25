@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pt
+.env
+data/raw/
+data/clips/

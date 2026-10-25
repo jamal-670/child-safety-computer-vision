@@ -1,0 +1,18 @@
+camera:
+  source: 0            # 0 = webcam. Later: a video file path or an RTSP URL
+
+model:
+  path: models/yolov8n-pose.pt
+  conf: 0.55           # minimum confidence to accept a person
+
+fall:
+  min_joint_conf: 0.5      # ignore joints the model is not sure about
+  smooth_frames: 5         # average the angle over this many frames
+  angle_deg: 60            # torso tilt above this = lying pose
+  recover_angle_deg: 40    # torso tilt below this = person got up
+  aspect_ratio: 1.2        # body box wider than tall = lying pose
+  speed_window_sec: 0.5    # time window used to measure hip drop speed
+  drop_speed: 1.5          # torso-lengths per second (a fast drop)
+  drop_window_sec: 2.0     # a fast drop counts for this long
+  stay_down_sec: 3.0       # must stay down this long to confirm a fall
+  cooldown_sec: 30         # minimum time between two alerts for one person
