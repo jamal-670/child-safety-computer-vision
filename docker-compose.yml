@@ -1,0 +1,7 @@
+services:
+  safeguard:
+    build: .
+    image: safeguard:latest
+    volumes:
+      - ./data:/app/data:ro
+    command: ["--headless", "--source", "/app/data/raw"]

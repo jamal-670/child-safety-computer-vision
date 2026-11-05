@@ -112,7 +112,7 @@ def analyze_tracked_people(people, analyzer, now, frame_index):
     return analyzed
 
 
-def process_source(source, cfg):
+def process_source(source, cfg, headless=False):
     """Process one webcam or video source."""
     cap = None
     try:
@@ -253,11 +253,12 @@ def process_source(source, cfg):
                 1
             )
 
-            cv2.imshow("SafeGuard - Fall Detection", display)
+            if not headless:
+                cv2.imshow("SafeGuard - Fall Detection", display)
 
-            if cv2.waitKey(1) & 0xFF == ord("q"):
-                print("[STOP] Video processing stopped by user.")
-                break
+                if cv2.waitKey(1) & 0xFF == ord("q"):
+                    print("[STOP] Video processing stopped by user.")
+                    break
 
         print(f"[FINISHED] {source}")
     finally:
@@ -265,7 +266,8 @@ def process_source(source, cfg):
             if cap is not None:
                 cap.release()
         finally:
-            cv2.destroyAllWindows()
+            if not headless:
+                cv2.destroyAllWindows()
 
 
 def main():
@@ -279,6 +281,11 @@ def main():
         default=None,
         help="Video file or folder containing videos"
     )
+    parser.add_argument(
+        "--headless",
+        action="store_true",
+        help="Process sources without opening a display window"
+    )
 
     args = parser.parse_args()
 
@@ -291,7 +298,7 @@ def main():
     print(f"[INFO] Found {len(sources)} source(s).")
 
     for video_source in sources:
-        process_source(video_source, cfg)
+        process_source(video_source, cfg, headless=args.headless)
 
 
 if __name__ == "__main__":

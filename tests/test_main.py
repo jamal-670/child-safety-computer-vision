@@ -208,6 +208,30 @@ def test_process_source_releases_capture_when_video_cannot_open(
     assert "Could not open source" in capsys.readouterr().out
 
 
+def test_process_source_headless_skips_window_calls(monkeypatch):
+    capture = FakeCapture(0)
+    _mock_pipeline(monkeypatch, [capture])
+    monkeypatch.setattr(
+        main_module.cv2,
+        "imshow",
+        lambda *args: pytest.fail("headless processing must not open a window"),
+    )
+    monkeypatch.setattr(
+        main_module.cv2,
+        "waitKey",
+        lambda *args: pytest.fail("headless processing must not wait for input"),
+    )
+    monkeypatch.setattr(
+        main_module.cv2,
+        "destroyAllWindows",
+        lambda: pytest.fail("headless processing must not manage windows"),
+    )
+
+    main_module.process_source(0, load_config(), headless=True)
+
+    assert capture.released is True
+
+
 def test_process_source_stops_on_empty_frame_and_releases_capture(
     monkeypatch, capsys
 ):
