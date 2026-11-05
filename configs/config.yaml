@@ -1,6 +1,6 @@
 
 camera:
-  source: 0
+  source: data/raw
 
 model:
   path: models/yolov8n-pose.pt

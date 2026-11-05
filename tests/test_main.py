@@ -26,7 +26,7 @@ def test_load_config_reads_yaml_configuration(tmp_path):
 def test_load_config_reads_project_configuration():
     config = load_config("configs/config.yaml")
 
-    assert config["camera"]["source"] == 0
+    assert config["camera"]["source"] == "data/raw"
     assert config["fall"]["stay_down_sec"] > 0
     assert config["fall"]["max_observation_gap_sec"] > 0
 

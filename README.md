@@ -1,7 +1,25 @@
 # SafeGuard
 
-SafeGuard processes webcam or video input to detect possible falls using YOLO
-pose estimation.
+SafeGuard processes video input to detect possible falls using YOLO pose
+estimation. By default, it processes all supported videos in `data/raw/`.
+
+## Run locally
+
+Install the Python dependencies and put one or more `.mp4`, `.avi`, `.mov`, or
+`.mkv` videos in `data/raw/`. Then run from the project directory:
+
+```sh
+python -m pip install -r requirements.txt
+python -m src.main
+```
+
+To process one video instead of the whole folder:
+
+```sh
+python -m src.main --source data/raw/your-video.mp4
+```
+
+The application opens a display window while processing. Press `q` to stop.
 
 ## Run with Docker
 
