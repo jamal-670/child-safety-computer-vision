@@ -1,18 +1,55 @@
+
 camera:
-  source: 0            # 0 = webcam. Later: a video file path or an RTSP URL
+  source: 0
 
 model:
   path: models/yolov8n-pose.pt
-  conf: 0.55           # minimum confidence to accept a person
+  conf: 0.60
+
+display:
+  show_labels: true
+
+debug: false
 
 fall:
-  min_joint_conf: 0.5      # ignore joints the model is not sure about
-  smooth_frames: 5         # average the angle over this many frames
-  angle_deg: 60            # torso tilt above this = lying pose
-  recover_angle_deg: 40    # torso tilt below this = person got up
-  aspect_ratio: 1.2        # body box wider than tall = lying pose
-  speed_window_sec: 0.5    # time window used to measure hip drop speed
-  drop_speed: 1.5          # torso-lengths per second (a fast drop)
-  drop_window_sec: 2.0     # a fast drop counts for this long
-  stay_down_sec: 3.0       # must stay down this long to confirm a fall
-  cooldown_sec: 30         # minimum time between two alerts for one person
+  min_joint_conf: 0.5
+
+  # Smooth torso angle over the last 5 valid frames.
+  smooth_frames: 5
+
+  # Torso tilt measured from vertical.
+  angle_deg: 60
+  recover_angle_deg: 40
+
+  # Body width / height ratio estimated from visible keypoints.
+  aspect_ratio: 1.2
+
+  # Measure downward movement over this interval.
+  speed_window_sec: 0.5
+
+  # Ignore pose measurements smaller than this torso length in pixels.
+  min_torso_length_px: 10
+
+  # Ignore speed estimates from nearly simultaneous samples.
+  min_speed_interval_sec: 0.05
+
+  # Suspicious downward speed in torso lengths per second.
+  drop_speed: 1.5
+
+  # How long rapid-drop evidence remains valid.
+  drop_window_sec: 2.0
+
+  # Required continuous lying time to confirm a possible fall.
+  stay_down_sec: 3.0
+
+  # Maximum time a possible fall can remain unresolved.
+  possible_timeout_sec: 4.0
+
+  # A larger gap between reliable poses resets continuous lying time.
+  max_observation_gap_sec: 1.0
+
+  # Minimum time between alerts for the same tracked person.
+  cooldown_sec: 30
+
+  # Remove tracking state after this many seconds without a detection.
+  track_timeout_sec: 10
